@@ -1,6 +1,7 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
-import path from "path";
+import { UserButton, SignedIn, SignedOut } from "@clerk/nextjs";
 export default function Header() {
   const menuOption = [
     {
@@ -23,9 +24,9 @@ export default function Header() {
         <div className=" cursor-pointer w-9 h-9 bg-[#1a1a2e] flex items-center justify-center shrink-0 rounded-[10PX]">
           <Image src={"/logo.svg"} alt="logo" width={18} height={18} />
         </div>
-       <h2 className="font-bold text-[1.2rem] tracking-tight text-[#1a1a2e]">
-  Atlas<span className="text-indigo-600">Mind</span>
-</h2>
+        <h2 className="font-bold text-[1.2rem] tracking-tight text-[#1a1a2e]">
+          Atlas<span className="text-indigo-600">Mind</span>
+        </h2>
       </div>
 
       {/* Menu-Options */}
@@ -40,12 +41,24 @@ export default function Header() {
       </div>
       {/* Get Started Button  */}
       <div className="flex items-center gap-2.5">
-         <button className="text-gray-700 text-sm font-medium px-4 py-2 rounded-lg border border-gray-200 hover:bg-gray-50 transition-all cursor-pointer">Log in</button>
-         <button className=" text-white text-sm font-semibold bg-[#1a1a2e] px-5 py-2  rounded-lg hover:bg-[#2d2d4e] hover:-translate-y-px transition-all duration-150 cursor-pointer">
-        Get Started →
-         </button>
-        </div>
-     
+        <SignedOut>
+          <Link
+            href="/sign-in"
+            className="text-gray-700 text-sm font-medium px-4 py-2 rounded-lg border border-gray-200 hover:bg-gray-50 transition-all cursor-pointer"
+          >
+            Log in
+          </Link>
+          <Link
+            href="/sign-up"
+            className=" text-white text-sm font-semibold bg-[#1a1a2e] px-5 py-2  rounded-lg hover:bg-[#2d2d4e] hover:-translate-y-px transition-all duration-150 cursor-pointer"
+          >
+            Get Started →
+          </Link>
+        </SignedOut>
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
+      </div>
     </div>
   );
 }
