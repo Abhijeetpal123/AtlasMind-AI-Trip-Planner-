@@ -1,5 +1,8 @@
+"use client";
+import { useUser } from "@clerk/nextjs";
 import { Globe, Landmark, Plane, Play } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/router";
 export default function Hero() {
   const suggestions = [
     {
@@ -13,7 +16,7 @@ export default function Hero() {
     {
       title: "Find Hotel",
       icon: <Landmark className="text-indigo-400 h-5 w-5" />,
-    }, 
+    },
     {
       title: "Plan Itine",
       icon: <Globe className="text-indigo-400 h-5 w-5" />,
@@ -50,6 +53,18 @@ export default function Hero() {
       bestTime: "May-Oct",
     },
   ];
+
+//   const { user } = useUser();
+//   const router = useRouter();
+// const onsend=()=>{
+// if(!user){
+//   router.push('/sign-in')
+//   return;
+// }
+// //Navigate to Create Trip Planner  Web Page 
+// router.push()
+// }
+
 
   return (
     <div className="mt-24 w-full flex flex-col items-center px-4 gap-8">

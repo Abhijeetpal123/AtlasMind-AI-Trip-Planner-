@@ -1,8 +1,10 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { UserButton, SignedIn, SignedOut } from "@clerk/nextjs";
+import { UserButton, SignedIn, SignedOut, useUser } from "@clerk/nextjs";
 export default function Header() {
+  const { user } = useUser();
+
   const menuOption = [
     {
       name: "Home",
@@ -41,23 +43,29 @@ export default function Header() {
       </div>
       {/* Get Started Button  */}
       <div className="flex items-center gap-2.5">
-        <SignedOut>
-          <Link
-            href="/sign-in"
-            className="text-gray-700 text-sm font-medium px-4 py-2 rounded-lg border border-gray-200 hover:bg-gray-50 transition-all cursor-pointer"
-          >
-            Log in
-          </Link>
+        <Link
+          href="/sign-in"
+          className="text-gray-700 text-sm font-medium px-4 py-2 rounded-lg border border-gray-200 hover:bg-gray-50 transition-all cursor-pointer"
+        >
+          Log in
+        </Link>
+
+        {!user ? (
           <Link
             href="/sign-up"
             className=" text-white text-sm font-semibold bg-[#1a1a2e] px-5 py-2  rounded-lg hover:bg-[#2d2d4e] hover:-translate-y-px transition-all duration-150 cursor-pointer"
           >
             Get Started →
           </Link>
-        </SignedOut>
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
+        ) : (
+          <Link href={'/create-new-trip'}>
+          <button  className="text-white text-sm font:semibold bg-indigo-600  px-5 py-2  rounded-lg  hover:bg-indigo-700 transition-all duration-150 cursor-pointer">
+            Create New Trip
+          </button>
+          </Link>
+        )}
+
+        <UserButton />
       </div>
     </div>
   );

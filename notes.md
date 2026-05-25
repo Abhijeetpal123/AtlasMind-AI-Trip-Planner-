@@ -1,0 +1,1 @@
+ response_format: {type: 'json_object'} — ye force karta hai AI ko valid JSON return karne ke liye. Bahut important hai production apps mein.Sonnet 4.6
