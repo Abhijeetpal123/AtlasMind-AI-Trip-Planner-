@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
+import Groq from "groq-sdk";
 
-import OpenAI from "openai";
-
-const client = new OpenAI({
-  baseURL: "https://openrouter.ai/api/v1",
-  apiKey: process.env.OPENROUTER_API_KEY,
+const client = new Groq({
+  // baseURL: "https://openrouter.ai/api/v1",
+  apiKey: process.env.GROQ_API_KEY,
 });
 
 const PROMPT = `
@@ -50,19 +49,86 @@ Once ALL 7 details are collected, return ONLY this JSON (no extra text):
 
 Always respond in valid JSON. Never break the JSON format.
 `;
+const FINAL_PROMPT = `
+You are an expert travel planner. Based on the trip details provided, generate a comprehensive and realistic travel plan.
+
+Return ONLY a valid JSON object with no extra text, markdown, or explanation.
+
+Output Schema:
+{
+  "trip_plan": {
+    "destination": "string",
+    "duration": "string",
+    "origin": "string",
+    "budget": "string",
+    "group_size": "string",
+    "hotels": [
+      {
+        "hotel_name": "string",
+        "hotel_address": "string",
+        "price_per_night": "string",
+        "hotel_image_url": "string",
+        "geo_coordinates": {
+          "latitude": "number",
+          "longitude": "number"
+        },
+        "rating": "number",
+        "description": "string"
+      }
+    ],
+    "itinerary": [
+      {
+        "day": "number",
+        "day_plan": "string",
+        "best_time_to_visit": "string",
+        "activities": [
+          {
+            "place_name": "string",
+            "place_details": "string",
+            "place_image_url": "string",
+            "geo_coordinates": {
+              "latitude": "number",
+              "longitude": "number"
+            },
+            "place_address": "string",
+            "ticket_pricing": "string",
+            "time_to_spend": "string"
+          }
+        ]
+      }
+    ]
+  }
+}
+
+Rules:
+- Always return minimum 3 hotel options
+- Each day must have minimum 3 activities
+- Price must be realistic based on budget level (Low/Medium/High)
+- Use real place names, addresses and coordinates
+- hotel_image_url and place_image_url should be realistic placeholder: "https://via.placeholder.com/400x300?text=PlaceName"
+- rating must be between 1.0 to 5.0
+- time_to_spend should be like "2-3 hours" or "1 hour"
+- ticket_pricing should be like "Free", "$10 per person", "₹500 per person"
+`;
 
 export async function POST(req: NextRequest) {
-  const { messages } = await req.json();
+  const { messages, isFinal } = await req.json();
+
+const cleanMessages = messages.map(({role,content}:{role:string,content:string})=>({
+  role,
+  content
+}))
+
   try {
     const apiResponse = await client.chat.completions.create({
-      model: "openai/gpt-oss-120b:free",
-        response_format: { type: "json_object" },
+      model: "llama-3.3-70b-versatile",
+      response_format: { type: "json_object" },
       messages: [
         {
           role: "system",
-          content: PROMPT,
+          content: isFinal ? FINAL_PROMPT : PROMPT,
         },
-        ...messages,
+        ...cleanMessages
       ],
     });
 

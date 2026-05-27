@@ -1,18 +1,35 @@
 "use client";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import EmptySection from "./emptySection";
 
 type Message = {
   role: string;
   content: string;
+  ui?: string;
 };
 
-export default function ChatBot() {
+export type TripInfo = {
+  budget: string;
+  destination: string;
+  duration: number;
+  group_size: string;
+  origin: string;
+  hotels: any;
+  itinerary: any;
+};
+
+export type ChatBotProps = {
+  onTripComplete: (data: TripInfo) => void;
+};
+
+export default function ChatBot({ onTripComplete }: ChatBotProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [userInput, setUserInput] = useState<string>();
   const [loading, setLoading] = useState<boolean>();
-
+  const [isFinal, setIsFinal] = useState(false);
+  const [tripDetail, setTripDetail] = useState<TripInfo>();
+  const messageEndRef = useRef<HTMLDivElement>(null);
   const onSend = async () => {
     if (!userInput?.trim()) return;
     setUserInput("");
@@ -20,22 +37,42 @@ export default function ChatBot() {
       role: "user",
       content: userInput,
     };
-    setMessages((prev: Message[]) => [...prev, newMsg]);
+
+    !isFinal && setMessages((prev: Message[]) => [...prev, newMsg]);
 
     setLoading(true);
     const result = await axios.post("/api/aimodel", {
       messages: [...messages, newMsg],
+      isFinal: isFinal,
     });
+    console.log("TRIP", result.data);
     setMessages((prev: Message[]) => [
       ...prev,
       {
         role: "assistant",
         content: result?.data?.resp,
+        ui: result?.data?.ui,
       },
     ]);
+    if (isFinal) {
+      setTripDetail(result?.data?.trip_plan);
+      onTripComplete(result?.data?.trip_plan);
+    }
     setLoading(false);
-    console.log(result.data);
   };
+
+  useEffect(() => {
+    const lastMsg = messages[messages.length - 1];
+    if (lastMsg?.ui == "final" && !isFinal) {
+      setIsFinal(true);
+      setUserInput("Ok Great");
+      onSend();
+    }
+  }, [messages]);
+
+useEffect(()=>{
+messageEndRef.current?.scrollIntoView({behavior:"smooth"})
+},[messages,loading])
 
   return (
     <div className="flex flex-col h-[85vh] max-w-3xl mx-auto px-4 ">
@@ -72,7 +109,19 @@ export default function ChatBot() {
 
         {/* Loading State  */}
 
-        {}
+        {loading && (
+          <div className="flex justify-start gap-3 ">
+            <div className=" w-8 h-8 bg-[#1a1a2e] rounded-full flex items-center justify-center shrink-0">
+              <span className="text-white text-xs font-bold">A</span>
+            </div>
+            <div className="bg-gray-100 text-gray-700 text-sm px-4 py-2.5 rounded-2xl rounded-bl-sm flex items-center gap-1">
+              <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:0ms]"></span>
+              <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:150ms]"></span>
+              <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:300ms]"></span>
+            </div>
+          </div>
+        )}
+        <div ref={messageEndRef}/>
       </section>
 
       {/* User Input  */}
@@ -89,13 +138,14 @@ export default function ChatBot() {
               Press Enter or Click Send
             </span>
             <button
+              disabled={loading}
               onClick={onSend}
               className="bg-[#1a1a2e] text-white text-sm font-semibold px-5 py-2 rounded-lg hover:bg-[#2d2d4e] transition-all duration-150 cursor-pointer"
             >
-              Send
+              {loading ? "Thinking..." : "Send"}
             </button>
           </div>
-        </div>
+        </div >
       </section>
     </div>
   );
