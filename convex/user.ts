@@ -20,7 +20,7 @@ export const CreateNewUser = mutation({
       };
       //If not then create new user
       const result = await ctx.db.insert("users", userData);
-      return userData;
+      return await ctx.db.get(result);
     }
     return user[0];
   },

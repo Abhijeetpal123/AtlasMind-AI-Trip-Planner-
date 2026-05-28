@@ -13,6 +13,12 @@ export default function Hotels({ hotels }: { hotels: any[] }) {
               alt={hotel.hotel_name}
               className="w-24 h-24 rounded-xl object-cover shrink-0"
             />
+            {/* // Hotel card mein */}
+            {/* <iframe
+              src={`https://www.google.com/maps?q=${hotel.geo_coordinates.latitude},${hotel.geo_coordinates.longitude}&z=15&output=embed`}
+              className="w-full h-32 rounded-xl border-0"
+              loading="lazy"
+            /> */}
             <div className="space-y-1">
               <h3 className="font-semibold text-sm text-[#1a1a2e]">
                 {hotel.hotel_name}
@@ -22,7 +28,9 @@ export default function Hotels({ hotels }: { hotels: any[] }) {
                 <span className="bg-indigo-50 text-indigo-600 text-xs font-semibold px-2 py-1 rounded-full">
                   💰 {hotel.price_per_night}
                 </span>
-                <span className="bg-yellow-50 text-yellow-600 text-xs font-semibold px-2 py-1 rounded-full">⭐ {hotel.rating}</span>
+                <span className="bg-yellow-50 text-yellow-600 text-xs font-semibold px-2 py-1 rounded-full">
+                  ⭐ {hotel.rating}
+                </span>
               </div>
             </div>
           </div>

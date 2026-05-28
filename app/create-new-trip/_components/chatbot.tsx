@@ -2,7 +2,10 @@
 import axios from "axios";
 import { useEffect, useState, useRef } from "react";
 import EmptySection from "./emptySection";
-
+import { useMutation } from "convex/react";
+import { useUserDetail } from "@/app/provider";
+import { v4 as uuidv4 } from "uuid";
+import { api } from "@/convex/_generated/api";
 type Message = {
   role: string;
   content: string;
@@ -29,6 +32,8 @@ export default function ChatBot({ onTripComplete }: ChatBotProps) {
   const [loading, setLoading] = useState<boolean>();
   const [isFinal, setIsFinal] = useState(false);
   const [tripDetail, setTripDetail] = useState<TripInfo>();
+  const SaveTripDetail = useMutation(api.tripdetail.CreateTripDetail);
+  const { userDetail, setUserDetail } = useUserDetail();
   const messageEndRef = useRef<HTMLDivElement>(null);
   const onSend = async () => {
     if (!userInput?.trim()) return;
@@ -57,6 +62,17 @@ export default function ChatBot({ onTripComplete }: ChatBotProps) {
     if (isFinal) {
       setTripDetail(result?.data?.trip_plan);
       onTripComplete(result?.data?.trip_plan);
+      const tripId = uuidv4();
+      console.log("tripId:", tripId);
+      console.log("userDetail:", userDetail);
+      console.log("tripDetail:", result?.data?.trip_plan);
+      if (userDetail?._id) {
+        await SaveTripDetail({
+          tripDetail: result?.data?.trip_plan,
+          tripId: tripId,
+          uid: userDetail?._id,
+        });
+      }
     }
     setLoading(false);
   };
@@ -70,9 +86,9 @@ export default function ChatBot({ onTripComplete }: ChatBotProps) {
     }
   }, [messages]);
 
-useEffect(()=>{
-messageEndRef.current?.scrollIntoView({behavior:"smooth"})
-},[messages,loading])
+  useEffect(() => {
+    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, loading]);
 
   return (
     <div className="flex flex-col h-[85vh] max-w-3xl mx-auto px-4 ">
@@ -121,7 +137,7 @@ messageEndRef.current?.scrollIntoView({behavior:"smooth"})
             </div>
           </div>
         )}
-        <div ref={messageEndRef}/>
+        <div ref={messageEndRef} />
       </section>
 
       {/* User Input  */}
@@ -132,6 +148,12 @@ messageEndRef.current?.scrollIntoView({behavior:"smooth"})
             placeholder="Ask me anything about a trip..."
             onChange={(event) => setUserInput(event.target.value)}
             value={userInput}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                onSend();
+              }
+            }}
           />
           <div className="flex items-center justify-between  border-t border-gray-100 pt-3 ">
             <span className="text-xs text-gray-400">
@@ -145,7 +167,7 @@ messageEndRef.current?.scrollIntoView({behavior:"smooth"})
               {loading ? "Thinking..." : "Send"}
             </button>
           </div>
-        </div >
+        </div>
       </section>
     </div>
   );
