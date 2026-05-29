@@ -1,9 +1,20 @@
 "use client";
-import { useUser } from "@clerk/nextjs";
+
 import { Globe, Landmark, Plane, Play } from "lucide-react";
 import Image from "next/image";
-import { useRouter } from "next/router";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 export default function Hero() {
+  const router = useRouter();
+  const [input, setInput] = useState("");
+  const handlePlanTrip = () => {
+    if (input.trim()) {
+      router.push(`/create-new-trip?prompt=${input}`);
+    } else {
+      router.push("/create-new-trip");
+    }
+  };
   const suggestions = [
     {
       title: "Explore Destinations ",
@@ -54,17 +65,16 @@ export default function Hero() {
     },
   ];
 
-//   const { user } = useUser();
-//   const router = useRouter();
-// const onsend=()=>{
-// if(!user){
-//   router.push('/sign-in')
-//   return;
-// }
-// //Navigate to Create Trip Planner  Web Page 
-// router.push()
-// }
-
+  //   const { user } = useUser();
+  //   const router = useRouter();
+  // const onsend=()=>{
+  // if(!user){
+  //   router.push('/sign-in')
+  //   return;
+  // }
+  // //Navigate to Create Trip Planner  Web Page
+  // router.push()
+  // }
 
   return (
     <div className="mt-24 w-full flex flex-col items-center px-4 gap-8">
@@ -86,6 +96,7 @@ export default function Hero() {
 
       <div className="w-full max-w-2xl border border-gray-200 rounded-2xl p-4 shadow-sm bg-white flex flex-col gap-2">
         <textarea
+          onChange={(e) => setInput(e.target.value)}
           className="w-full h-20 resize-none bg-transparent border-none focus:ring-0 text-sm text-gray-700 placeholder:text-gray-400 outline-none"
           placeholder="e.g. Plan a 7 day trip Delhi to Thailand,budget friendly......"
         />
@@ -93,7 +104,10 @@ export default function Hero() {
           <span className="text-xs text-gray-400">
             Be as specific as you like{" "}
           </span>
-          <button className="bg-[#1a1a2e] text-white text-sm font-semibold px-5 py-2 rounded-lg hover:bg-[#2d2d4e] transition-all duration-150 cursor-pointer">
+          <button
+            onClick={handlePlanTrip}
+            className="bg-[#1a1a2e] text-white text-sm font-semibold px-5 py-2 rounded-lg hover:bg-[#2d2d4e] transition-all duration-150 cursor-pointer"
+          >
             Plan My Trip →
           </button>
         </div>

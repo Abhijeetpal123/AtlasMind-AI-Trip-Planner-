@@ -32,7 +32,7 @@ export default function Provider({
       name: user?.fullName ?? "",
     });
     setUserDetail(result);
-    console.log(result);
+    // console.log(result);
   };
 
   return (

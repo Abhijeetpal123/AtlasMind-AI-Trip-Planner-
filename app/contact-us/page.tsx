@@ -1,7 +1,6 @@
 export default function ContactUs() {
   return (
     <div className="min-h-screen bg-gray-50/50 px-4 py-20">
-      
       {/* Header */}
       <div className="text-center mb-12 space-y-4">
         <span className="inline-block bg-indigo-50 text-indigo-600 text-xs font-semibold px-4 py-1.5 rounded-full tracking-wide">
@@ -16,11 +15,12 @@ export default function ContactUs() {
       </div>
 
       <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
-        
         {/* Form */}
         <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm space-y-4">
-          <h2 className="text-lg font-semibold text-[#1a1a2e]">Send a Message</h2>
-          
+          <h2 className="text-lg font-semibold text-[#1a1a2e]">
+            Send a Message
+          </h2>
+
           <div className="space-y-1">
             <label className="text-xs font-medium text-gray-500">Name</label>
             <input
@@ -67,7 +67,9 @@ export default function ContactUs() {
             <div className="w-9 h-9 bg-indigo-50 rounded-lg flex items-center justify-center">
               <span className="text-lg">⏰</span>
             </div>
-            <h3 className="text-sm font-semibold text-[#1a1a2e]">Response Time</h3>
+            <h3 className="text-sm font-semibold text-[#1a1a2e]">
+              Response Time
+            </h3>
             <p className="text-xs text-gray-400">We reply within 24 hours</p>
           </div>
 
@@ -79,7 +81,6 @@ export default function ContactUs() {
             <p className="text-xs text-gray-400">India 🇮🇳</p>
           </div>
         </div>
-
       </div>
     </div>
   );

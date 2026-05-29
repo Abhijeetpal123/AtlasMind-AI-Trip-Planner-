@@ -32,7 +32,7 @@ export default function ChatBot({ onTripComplete }: ChatBotProps) {
   const [loading, setLoading] = useState<boolean>();
   const [isFinal, setIsFinal] = useState(false);
   const [tripDetail, setTripDetail] = useState<TripInfo>();
-  const SaveTripDetail = useMutation(api.tripdetail.CreateTripDetail);
+  const SaveTripDetail = useMutation(api.tripDetail.CreateTripDetail);
   const { userDetail, setUserDetail } = useUserDetail();
   const messageEndRef = useRef<HTMLDivElement>(null);
   const onSend = async () => {
@@ -112,11 +112,10 @@ export default function ChatBot({ onTripComplete }: ChatBotProps) {
               </div>
             )}
             <div
-              className={`text-sm px-4 py-2.5 max-w-sm ${
-                msg.role === "user"
+              className={`text-sm px-4 py-2.5 max-w-sm ${msg.role === "user"
                   ? "bg-indigo-600 text-white rounded-2xl rounded-br-sm "
                   : "bg-gray-100 text-gray-700 rounded-2xl rounded-bl-sm"
-              }`}
+                }`}
             >
               {msg.content}
             </div>

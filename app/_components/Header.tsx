@@ -18,6 +18,10 @@ export default function Header() {
       name: "Contact-us",
       path: "/contact-us",
     },
+    {
+      name:"My Trips",
+      path:"/my-trips"
+    }
   ];
   return (
     <div className="flex items-center justify-between px-[10] h-17 max-w-7xl mx-auto border-b border-gray-100 sticky top-0 z-50 bg-white ">
