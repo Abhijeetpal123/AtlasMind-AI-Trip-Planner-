@@ -1,13 +1,23 @@
+"use client";
+import { motion } from "framer-motion";
 export default function Itinerary({ itinerary }: { itinerary: any }) {
   return (
     <div className="space-y-4 ">
-      <h2 className="text-2xl font-bold text-[#1a1a2e] tracking-tight">
+      <motion.h2
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="text-2xl font-bold text-[#1a1a2e] tracking-tight"
+      >
         🗺️ Day by Day Itinerary
-      </h2>
+      </motion.h2>
       <div className=" space-y-4">
         {itinerary?.map((day: any, index: number) => (
-          <div
+          <motion.div
             key={index}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: index * 0.1 }}
             className="border border-gray-200 rounded-2xl p-5 bg-white space-y-4 shadow-sm"
           >
             <div className="flex items-center gap-3">
@@ -24,8 +34,12 @@ export default function Itinerary({ itinerary }: { itinerary: any }) {
             </p>
             <div className="space-y-3">
               {day.activities?.map((activity: any, i: number) => (
-                <div
+                <motion.div
                   key={i}
+                  initial={{ opacity: 0, x: -10 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.3, delay: i * 0.1 }}
                   className=" border  border-gray-100 rounded-xl p-4 space-y-2 hover:shadow-sm transition-all"
                 >
                   {/* Activity number */}
@@ -53,10 +67,10 @@ export default function Itinerary({ itinerary }: { itinerary: any }) {
                       ⏱️{activity?.time_to_spend}
                     </span>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
     </div>

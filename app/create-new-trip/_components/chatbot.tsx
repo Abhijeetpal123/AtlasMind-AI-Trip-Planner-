@@ -142,7 +142,19 @@ export default function ChatBot({ onTripComplete }: ChatBotProps) {
       {/* User Input  */}
       <section className="pb-6">
         <div className="w-full  border border-gray-200 rounded-2xl p-4 shadow-sm bg-white flex flex-col gap-2">
-          <textarea
+        {isFinal && tripDetail?(
+          <div className="pb-6 text-center">
+            <p className="text-sm text-gray-400 mb-3">Trip Plan is ready! 🎉</p>
+            <button onClick={()=>{
+              setMessages([]);
+              setIsFinal(false);
+              setUserInput("")
+            }}
+             className="bg-indigo-600 text-white font-semibold px-5 py-2.5 rounded-lg hover:bg-indigo-700 transition-all">
+               + Plan Another Trip
+            </button>
+            </div>
+        ):( <textarea
             className="w-full h-20 resize-none bg-transparent border-none focus:ring-0 text-sm text-gray-700 placeholder:text-gray-400 outline-none"
             placeholder="Ask me anything about a trip..."
             onChange={(event) => setUserInput(event.target.value)}
@@ -153,8 +165,8 @@ export default function ChatBot({ onTripComplete }: ChatBotProps) {
                 onSend();
               }
             }}
-          />
-          <div className="flex items-center justify-between  border-t border-gray-100 pt-3 ">
+          />)}
+         {!isFinal &&( <div className="flex items-center justify-between  border-t border-gray-100 pt-3 ">
             <span className="text-xs text-gray-400">
               Press Enter or Click Send
             </span>
@@ -165,7 +177,8 @@ export default function ChatBot({ onTripComplete }: ChatBotProps) {
             >
               {loading ? "Thinking..." : "Send"}
             </button>
-          </div>
+          </div>)}
+         
         </div>
       </section>
     </div>
