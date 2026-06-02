@@ -12,6 +12,13 @@ export default function MyTrip() {
   );
   console.log(trips);
 
+  if (!userDetail)
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-gray-400 text-sm">Loading....✈️</p>
+      </div>
+    );
+
   return (
     <div className="min-h-screen  bg-gray-50/50 px-4 py-20">
       {/* HEADER */}

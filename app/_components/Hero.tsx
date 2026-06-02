@@ -1,10 +1,10 @@
 "use client";
 
-import { Globe, Landmark, Plane, Play } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
+import Lottie from "lottie-react";
+import travelAnimation from "@/public/travel.json";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Globe, Plane, Landmark } from "lucide-react";
 export default function Hero() {
   const router = useRouter();
   const [input, setInput] = useState("");
@@ -65,17 +65,6 @@ export default function Hero() {
     },
   ];
 
-  //   const { user } = useUser();
-  //   const router = useRouter();
-  // const onsend=()=>{
-  // if(!user){
-  //   router.push('/sign-in')
-  //   return;
-  // }
-  // //Navigate to Create Trip Planner  Web Page
-  // router.push()
-  // }
-
   return (
     <div className="mt-24 w-full flex flex-col items-center px-4 gap-8">
       {/* Content */}
@@ -119,7 +108,8 @@ export default function Hero() {
         {suggestions.map((item, index) => (
           <div
             key={index}
-            className="flex items-center gap-2 border rounded-full p-2 cursor-pointer "
+            onClick={() => router.push("/create-new-trip")}
+            className="flex items-center gap-2 border rounded-full p-2 cursor-pointer hover:border-indigo-400 hover:text-indigo-600 transition-all "
           >
             {item.icon}
             <h2 className="text-sm">{item.title}</h2>
@@ -136,25 +126,20 @@ export default function Hero() {
         </p>
         <div className=" relative rounded-2xl overflow-hidden border border-gray-200 shadow-lg  cursor-pointer group">
           {/* Thumbnail */}
-          <Image
-            src="/thumbnail.png"
-            alt="Atlas Mind Demo"
-            width={1200}
-            height={600}
-            className="w-full object-cover"
+          <Lottie
+            animationData={travelAnimation}
+            loop={true}
+            className="w-full max-h-80"
           />
-
-          {/* Play Button  */}
-          <div className="absolute inset-0 bg-black/30 flex items-center justify-center group-hover:bg-black/40 transition-all duration-200 ">
-            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-200 ">
-              <Play
-                className="w-6 h-6 text-[#1a1a2e] ml-1"
-                fill="currentColor"
-              />
-            </div>
-          </div>
+          {/* <p className="text-[#1a1a2e] font-semibold text-lg mt-4">
+            Plan your Perfect trip with AI ✈️
+          </p>
+          <p className="text-gray-400 text-sm mt-1">
+            Just chat — Atlas Mind handles the rest
+          </p> */}
         </div>
       </div>
+
       {/* Destination Card  */}
 
       <div className="w-full max-w-4xl mx-auto px-4 mt-8 pb-24">

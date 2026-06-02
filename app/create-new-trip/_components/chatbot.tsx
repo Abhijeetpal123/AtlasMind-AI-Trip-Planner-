@@ -91,7 +91,7 @@ export default function ChatBot({ onTripComplete }: ChatBotProps) {
   }, [messages, loading]);
 
   return (
-    <div className="flex flex-col h-[85vh] max-w-3xl mx-auto px-4 ">
+    <div className="flex flex-col h-full max-w-3xl mx-auto px-4 ">
       {/* Display Message  */}
 
       <section className="flex-1 overflow-y-auto py-6 space-y-4">
@@ -140,47 +140,54 @@ export default function ChatBot({ onTripComplete }: ChatBotProps) {
       </section>
 
       {/* User Input  */}
-      <section className="pb-6">
-        <div className="w-full  border border-gray-200 rounded-2xl p-4 shadow-sm bg-white flex flex-col gap-2">
-        {isFinal && tripDetail?(
-          <div className="pb-6 text-center">
-            <p className="text-sm text-gray-400 mb-3">Trip Plan is ready! 🎉</p>
-            <button onClick={()=>{
-              setMessages([]);
-              setIsFinal(false);
-              setUserInput("")
-            }}
-             className="bg-indigo-600 text-white font-semibold px-5 py-2.5 rounded-lg hover:bg-indigo-700 transition-all">
-               + Plan Another Trip
-            </button>
-            </div>
-        ):( <textarea
-            className="w-full h-20 resize-none bg-transparent border-none focus:ring-0 text-sm text-gray-700 placeholder:text-gray-400 outline-none"
-            placeholder="Ask me anything about a trip..."
-            onChange={(event) => setUserInput(event.target.value)}
-            value={userInput}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                onSend();
-              }
-            }}
-          />)}
-         {!isFinal &&( <div className="flex items-center justify-between  border-t border-gray-100 pt-3 ">
-            <span className="text-xs text-gray-400">
-              Press Enter or Click Send
-            </span>
-            <button
-              disabled={loading}
-              onClick={onSend}
-              className="bg-[#1a1a2e] text-white text-sm font-semibold px-5 py-2 rounded-lg hover:bg-[#2d2d4e] transition-all duration-150 cursor-pointer"
-            >
-              {loading ? "Thinking..." : "Send"}
-            </button>
-          </div>)}
-         
+      {/* User Input */}
+<section className="pb-6">
+  <div className="w-full border border-gray-200 rounded-2xl p-4 shadow-sm bg-white flex flex-col gap-2">
+    
+    {isFinal && tripDetail ? (
+      <div className="pb-2 text-center">
+        <p className="text-sm text-gray-400 mb-3">Trip Plan is ready! 🎉</p>
+        <button
+          onClick={() => {
+            setMessages([]);
+            setIsFinal(false);
+            setUserInput("");
+            setTripDetail(undefined);
+          }}
+          className="bg-indigo-600 text-white font-semibold px-5 py-2.5 rounded-lg hover:bg-indigo-700 transition-all"
+        >
+          + Plan Another Trip
+        </button>
+      </div>
+    ) : (
+      <>
+        <textarea
+          className="w-full h-20 resize-none bg-transparent border-none focus:ring-0 text-sm text-gray-700 placeholder:text-gray-400 outline-none"
+          placeholder="Ask me anything about a trip..."
+          onChange={(event) => setUserInput(event.target.value)}
+          value={userInput}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              onSend();
+            }
+          }}
+        />
+        <div className="flex items-center justify-between border-t border-gray-100 pt-3">
+          <span className="text-xs text-gray-400">Press Enter or Click Send</span>
+          <button
+            disabled={loading}
+            onClick={onSend}
+            className="bg-[#1a1a2e] text-white text-sm font-semibold px-5 py-2 rounded-lg hover:bg-[#2d2d4e] transition-all duration-150 cursor-pointer disabled:opacity-50"
+          >
+            {loading ? "Thinking..." : "Send"}
+          </button>
         </div>
-      </section>
+      </>
+    )}
+
+  </div>
+</section>
     </div>
   );
 }
