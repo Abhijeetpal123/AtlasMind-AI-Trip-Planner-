@@ -1,5 +1,6 @@
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
+import { ShareTrip } from "./trip";
 
 export default defineSchema({
   users: defineTable({
@@ -12,6 +13,8 @@ export default defineSchema({
   TripDetailTable: defineTable({
     tripId: v.string(),
     tripDetail: v.any(),
-     uid: v.optional(v.id("users"))
+    uid: v.optional(v.id("users")),
+    isPublic: v.optional(v.boolean()),
+    shareToken: v.optional(v.string()),
   }),
 });
