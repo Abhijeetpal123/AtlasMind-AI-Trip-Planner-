@@ -1,3 +1,4 @@
+"use client"
 import Hotels from "./hotels";
 import Itinerary from "./Itinerary";
 
