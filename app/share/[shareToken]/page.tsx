@@ -15,14 +15,14 @@ export default function PublicTrip({
     api.trip.GetPublicTrip,
     shareToken ? { shareToken } : "skip",
   );
-if (trip === undefined)
-  return (
-    <div className="min-h-screen flex items-center justify-center">
-      <p className="text-gray-400">Loading... ✈️</p>
-    </div>
-  );
-  
-  if (trip===null)
+  if (trip === undefined)
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-gray-400">Loading... ✈️</p>
+      </div>
+    );
+
+  if (trip === null)
     return (
       <div className="min-h-screen flex items-center justify-center">
         <p className="text-gray-400">Trip not found or not public</p>

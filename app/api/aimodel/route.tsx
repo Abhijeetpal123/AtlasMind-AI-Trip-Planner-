@@ -114,10 +114,12 @@ Rules:
 export async function POST(req: NextRequest) {
   const { messages, isFinal } = await req.json();
 
-const cleanMessages = messages.map(({role,content}:{role:string,content:string})=>({
-  role,
-  content
-}))
+  const cleanMessages = messages.map(
+    ({ role, content }: { role: string; content: string }) => ({
+      role,
+      content,
+    }),
+  );
 
   try {
     const apiResponse = await client.chat.completions.create({
@@ -128,7 +130,7 @@ const cleanMessages = messages.map(({role,content}:{role:string,content:string})
           role: "system",
           content: isFinal ? FINAL_PROMPT : PROMPT,
         },
-        ...cleanMessages
+        ...cleanMessages,
       ],
     });
 
